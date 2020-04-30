@@ -6,21 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://wyisterl.github.io">
-  <title>blog</title>
+  <title>部署K8S集群 | blog</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-    
-    <!-- <meta name="keywords" content="">
-    <meta name="description" content="这里发表的都是一些个人原创或者部分引用比较好的文章."> -->
-  
-  <meta name="description" content="这里发表的都是一些个人原创或者部分引用比较好的文章.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="blog">
-<meta property="og:url" content="https://wyisterl.github.io/index.html">
+  <meta name="description" content="简介大多数人在生产环境中运行Docker，是把它作为构建和移动部署配置的一种方式。然而，他们的部署模型要么非常整体化，要么有几个大的服务模块组成。使用真实的容器化微服务最大的障碍在于，很多人不太清楚如何管理和协调容器大规模负载。作为google 长期经营的Borg项目的开源的继承者，Kubernetes有将近10年的运行大规模负载的历史了。虽然也存在一些缺点，但Kubernetes是现今最成熟的容">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署K8S集群">
+<meta property="og:url" content="https://wyisterl.github.io/2020/03/21/%E9%83%A8%E7%BD%B2K8S%E9%9B%86%E7%BE%A4/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="这里发表的都是一些个人原创或者部分引用比较好的文章.">
+<meta property="og:description" content="简介大多数人在生产环境中运行Docker，是把它作为构建和移动部署配置的一种方式。然而，他们的部署模型要么非常整体化，要么有几个大的服务模块组成。使用真实的容器化微服务最大的障碍在于，很多人不太清楚如何管理和协调容器大规模负载。作为google 长期经营的Borg项目的开源的继承者，Kubernetes有将近10年的运行大规模负载的历史了。虽然也存在一些缺点，但Kubernetes是现今最成熟的容">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-20T18:23:24.000Z">
+<meta property="article:modified_time" content="2020-03-23T04:54:18.000Z">
 <meta property="article:author" content="ling.zhang">
 <meta name="twitter:card" content="summary">
   
@@ -180,208 +178,25 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-
-  
-    <article id="post-快速部署rancher-server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-部署K8S集群" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2020/03/21/%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2rancher-server/" target="_blank">快速部署rancher-server</a>
-  
+    <h1 class="article-title" itemprop="name">
+      部署K8S集群
     </h1>
   
 
 
   
   
-<a href="/2020/03/21/%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2rancher-server/" class="archive-article-date">
-        <time datetime="2020-03-21T08:33:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-21</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <ul>
-<li><a href="#%e7%ae%80%e4%bb%8b">简介</a><ul>
-<li><a href="#rancher%e6%98%af%e4%bb%80%e4%b9%88">Rancher是什么</a></li>
-<li><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81rancher">为什么需要Rancher</a></li>
-</ul>
-</li>
-<li><a href="#%e9%83%a8%e7%bd%b2">部署</a><ul>
-<li><a href="#%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87">环境准备</a></li>
-<li><a href="#%e5%ae%89%e8%a3%85helm">安装helm</a><ul>
-<li><a href="#helm%e6%98%af%e4%bb%80%e4%b9%88">helm是什么</a></li>
-<li><a href="#%e8%8e%b7%e5%8f%96helm3">获取Helm3</a></li>
-<li><a href="#%e6%b7%bb%e5%8a%a0%e5%ae%98%e6%96%b9%e4%bb%93%e5%ba%93">添加官方仓库</a></li>
-<li><a href="#%e5%88%9b%e5%bb%ba%e6%96%b0%e7%9a%84%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4">创建新的命名空间</a></li>
-<li><a href="#%e9%85%8d%e7%bd%aessl%e8%af%81%e4%b9%a6">配置SSL证书</a></li>
-<li><a href="#%e4%bd%bf%e7%94%a8helm%e9%83%a8%e7%bd%b2rancher-server">使用Helm部署Rancher Server</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#%e4%bd%bf%e7%94%a8">使用</a><ul>
-<li><a href="#%e7%99%bb%e5%bd%95">登录</a></li>
-<li><a href="#%e9%83%a8%e7%bd%b2%e5%ba%94%e7%94%a8">部署应用</a></li>
-<li><a href="#%e8%ae%bf%e9%97%ae%e5%ba%94%e7%94%a8">访问应用</a></li>
-</ul>
-</li>
-</ul>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="Rancher是什么"><a href="#Rancher是什么" class="headerlink" title="Rancher是什么"></a>Rancher是什么</h2><p>Rancher是一个开源的企业级容器管理平台。通过Rancher，企业再也不必自己使用一系列的开源软件去从头搭建容器服务平台。Rancher提供了在生产环境中使用的管理Docker和Kubernetes的全栈化容器部署与管理平台。</p>
-<img src="/images/快速部署rancher-server/rancher.png" width="50%" height="50%" />
-
-
-<h2 id="为什么需要Rancher"><a href="#为什么需要Rancher" class="headerlink" title="为什么需要Rancher"></a>为什么需要Rancher</h2><p>在以前, 如果我们需要做一个分布式集群我们需要学习一全套的框架并编码实现如 服务发现, 负载均衡等逻辑, 给开发者造成很大的负担, 不过好在现在有Docker以及他周边的一些技术能在上层解决这些问题, 而应用该怎么开发就怎么开发。</p>
-<p>当你选择使用Docker技术栈的时候, 会发现在生产环境中不光光是 docker run就能解决的. 还需要考虑比如docker之间的组网, 缩扩容等问题, 于是你去学习部署和使用Kubernetes, 发现太复杂了,光部署就已经很困难了，还要学习一系列的yaml语法来使用，有没有更简单一些的工具呢？Rancher 提供了一系列简单的工具用于部署和管理Kubernetes集群，通过webUI鼠标点点就可以轻松部署各种应用到Kubernetes集群上，技术小白也能轻松上手。</p>
-<h1 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h1><p>Rancher Server可以单独部署在一台机器上，也支持部署到Kubernetes集群当中，当然，为了管理方便，我们这里选择部署到Kubernetes集群当中。</p>
-<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>在部署Rancher之前，有一些工作需要提前准备：</p>
-<ul>
-<li>一个部署就绪，可以使用的Kubernetes集群</li>
-<li>安装helm 工具</li>
-<li>http ssl证书 (可选，非必须)</li>
-</ul>
-<h2 id="安装helm"><a href="#安装helm" class="headerlink" title="安装helm"></a>安装helm</h2><h3 id="helm是什么"><a href="#helm是什么" class="headerlink" title="helm是什么"></a>helm是什么</h3><p><a href="https://helm.sh/" target="_blank" rel="noopener">Helm</a>是Kubernetes的一个包管理工具，用来简化Kubernetes应用的部署和管理。可以把Helm比作CentOS的yum工具。</p>
-<h3 id="获取Helm3"><a href="#获取Helm3" class="headerlink" title="获取Helm3"></a>获取Helm3</h3><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-comment"># 下载</span><br><span class="hljs-string">curl </span><span class="hljs-string">https:</span>//<span class="hljs-string">raw.</span><span class="hljs-string">githubusercontent.</span><span class="hljs-string">com/</span><span class="hljs-string">helm/</span><span class="hljs-string">helm/</span><span class="hljs-string">master/</span><span class="hljs-string">scripts/</span><span class="hljs-built_in">get-helm-3</span> | <span class="hljs-string">bash</span><br><span class="hljs-string"></span><br><span class="hljs-string">#</span> 放入<span class="hljs-string">PATH路</span>径中可以直接使用.<br><span class="hljs-string">tar </span><span class="hljs-string">xf </span><span class="hljs-string">helm-v3.</span>1.<span class="hljs-string">2-linux-</span><span class="hljs-string">amd64.</span><span class="hljs-string">tar.</span><span class="hljs-string">gz</span><br><span class="hljs-string">sudo </span><span class="hljs-string">mv </span><span class="hljs-string">linux-amd64/</span><span class="hljs-string">helm </span>/<span class="hljs-string">usr/</span><span class="hljs-string">local/</span><span class="hljs-string">bin/</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="添加官方仓库"><a href="#添加官方仓库" class="headerlink" title="添加官方仓库"></a>添加官方仓库</h3><p>稳定版用于生产环境，最新版用于评估测试新功能.</p>
-<figure class="highlight vala"><table><tr><td class="code"><pre><code class="hljs vala"><span class="hljs-meta"># 稳定版</span><br>helm repo add rancher-stable https:<span class="hljs-comment">//releases.rancher.com/server-charts/stable</span><br><br><span class="hljs-meta"># 最新版</span><br>helm repo add rancher-latest https:<span class="hljs-comment">//releases.rancher.com/server-charts/latest</span><br><br><span class="hljs-meta">#  更新仓库</span><br>helm repo update<br></code></pre></td></tr></table></figure>
-
-<h3 id="创建新的命名空间"><a href="#创建新的命名空间" class="headerlink" title="创建新的命名空间"></a>创建新的命名空间</h3><p>Rancher Server 需要一个专用的命名空间用于部署，<code>cattle-system</code>这个名字是固定的，不能使用别的。</p>
-<figure class="highlight n1ql"><table><tr><td class="code"><pre><code class="hljs n1ql">kubectl <span class="hljs-keyword">create</span> <span class="hljs-keyword">namespace</span> cattle-<span class="hljs-keyword">system</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="配置SSL证书"><a href="#配置SSL证书" class="headerlink" title="配置SSL证书"></a>配置SSL证书</h3><p>Rancher Server默认设计为使用SSL证书用于加强安全，因此支持3种方式配置证书, 自签证书、Let’s Encrypt、使用已有的证书。这里我们使用已有证书方式。</p>
-<p><strong>创建证书Secrets对象</strong></p>
-<p>首先将证书公钥如<code>example.crt</code> 和私钥<code>example.key</code> 重命名为<strong><code>tls.crt</code></strong> , <strong><code>tls.key</code></strong>，放在当前目录下，然后创建成secrets对象。</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros">kubectl -n cattle-system create<span class="hljs-built_in"> secret </span>tls tls-rancher-ingress \<br>  <span class="hljs-attribute">--cert</span>=tls.crt \<br>  <span class="hljs-attribute">--key</span>=tls.key<br></code></pre></td></tr></table></figure>
-
-<h3 id="使用Helm部署Rancher-Server"><a href="#使用Helm部署Rancher-Server" class="headerlink" title="使用Helm部署Rancher Server"></a>使用Helm部署Rancher Server</h3><p><strong>注意：</strong> hostname是定义域名，一定要跟你的证书签发域名要一致，通常自有证书都是泛域名证书。</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros">helm install rancher rancher-stable/rancher \<br>  --namespace cattle-system \<br>  --<span class="hljs-builtin-name">set</span> <span class="hljs-attribute">hostname</span>=rancher-test.iquantex.com \<br>  --<span class="hljs-builtin-name">set</span> ingress.tls.<span class="hljs-attribute">source</span>=secret<br></code></pre></td></tr></table></figure>
-
-<img src="/images/快速部署rancher-server/helm-install-rancher.png" />
-
-<p>检查部署情况</p>
-<figure class="highlight vim"><table><tr><td class="code"><pre><code class="hljs vim">kubectl <span class="hljs-built_in">get</span> <span class="hljs-keyword">po</span> -n cattle-<span class="hljs-built_in">system</span><br></code></pre></td></tr></table></figure>
-
-<p>需要等待一些时间，因为要拉取Rancher Server的镜像,这取决于你的网络速度。</p>
-<img src="/images/快速部署rancher-server/check-pod.png" />
-
-<p>部署成功，启动完成。</p>
-<img src="/images/快速部署rancher-server/rancher-running.png" />
-
-
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>打开浏览器，输入配置的域名，首次登录会提示需要创建一个管理员密码。</p>
-<img src="/images/快速部署rancher-server/rancher-login.png" />
-
-<h2 id="部署应用"><a href="#部署应用" class="headerlink" title="部署应用"></a>部署应用</h2><p>默认只有2个命名空间: <code>default</code> 和 <code>system</code>, 通常需要建立一个单独的命名空间用于部署应用，system 是集群内部的专用命名空间，尽量不要部署应用到此。</p>
-<img src="/images/快速部署rancher-server/test-deploy.png" />
-
-<p>这里演示部署3个nginx实例到default命名空间，设置完成后，点击下面的<strong>Launch</strong></p>
-<img src="/images/快速部署rancher-server/test-deploy1.png" />
-
-<p>等待一会部署完成，容器启动成功。</p>
-<img src="/images/快速部署rancher-server/test-deploy2.png" />
-
-<h2 id="访问应用"><a href="#访问应用" class="headerlink" title="访问应用"></a>访问应用</h2><p>要访问部署在集群中的应用，有3种方式：</p>
-<ul>
-<li>LoadBalance (一般部署在公有云上时，由云厂商提供)</li>
-<li>Ingress   (常用方式，推荐)</li>
-<li>nodePorts   (调试用，一般不推荐使用)</li>
-</ul>
-<p>这里使用ingress进行配置</p>
-<img src="/images/快速部署rancher-server/ingress1.png" />
-
-<p>可以使用集成的<code>xp.io</code>域名功能进行测试应用，真实生产环境应该使用自有的主机域名。</p>
-<img src="/images/快速部署rancher-server/ingress2.png" />
-
-<p>等待创建完毕后，显示如下：</p>
-<img src="/images/快速部署rancher-server/ingress3.png" />
-
-<p>访问生成的url,应该可以访问到部署的nginx了</p>
-<img src="/images/快速部署rancher-server/ingress4.png" />
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/container//" class="article-tag-list-link color5">容器技术</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2020/03/21/%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2rancher-server/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
         
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
 
-
-
-
-
-  
-    <article id="post-部署K8S集群" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2020/03/21/%E9%83%A8%E7%BD%B2K8S%E9%9B%86%E7%BE%A4/" target="_blank">部署K8S集群</a>
-  
-    </h1>
-  
-
-
-  
-  
 <a href="/2020/03/21/%E9%83%A8%E7%BD%B2K8S%E9%9B%86%E7%BE%A4/" class="archive-article-date">
         <time datetime="2020-03-20T18:23:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-21</time>
 </a>
@@ -389,6 +204,27 @@
   
   
     
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">2.6k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">10分</span>
+    </span>
+  </span>
+</div>
+
 
   
   </header>
@@ -507,6 +343,38 @@
     
 
     
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我喝咖啡<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  <div class="reward-box-item">
+                    <img class="reward-img" src="/img/alipay.png">
+                    <span class="reward-type">支付宝</span>
+                  </div>
+                  
+                  
+                  <div class="reward-box-item">
+                    <img class="reward-img" src="/img/weixin.png">
+                    <span class="reward-type">微信</span>
+                  </div>
+                  
+                </div>
+              </span>
+            </span>
+          </span>
+        </div>
+      </a>
+    </div>
+    
 
     
 
@@ -528,16 +396,80 @@
 
 
     
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2020/03/21/%E9%83%A8%E7%BD%B2K8S%E9%9B%86%E7%BE%A4/">展开全文 >></a>
-    </p>
+
     
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://wyisterl.github.io/2020/03/21/%E9%83%A8%E7%BD%B2K8S%E9%9B%86%E7%BE%A4/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
 
     
     <div class="clearfix"></div>
   </div>
   </div>
 </article>
+
+
+<nav id="article-nav">
+  
+    <a href="/2020/03/21/%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2rancher-server/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          快速部署rancher-server
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -559,8 +491,16 @@
 
 
 
-  
-  
+
+
+
+
+
+
+
+
+
+
 
 
           </div>
@@ -600,8 +540,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
